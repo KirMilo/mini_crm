@@ -12,9 +12,3 @@ async def create_appeal(
 ) -> AppealResponseModel:
     """Создание обращения лида"""
     return appeal
-
-
-@router.get("/all")
-async def get_all_appeals():
-    pass
-

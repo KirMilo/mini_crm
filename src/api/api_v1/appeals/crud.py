@@ -1,8 +1,7 @@
 import random
-from typing import Sequence, Annotated
+from typing import Sequence
 
-from fastapi import Depends, Query
-from sqlalchemy import select
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.appeals.dependencies import get_operators, get_lead, get_source
@@ -35,14 +34,3 @@ async def create_appeal(
     session.add(appeal)
     await session.commit()
     return appeal
-
-
-async def get_appeals(
-        limit: Annotated[int, Query(gt=0)] = 100,
-        session: AsyncSession = Depends(get_async_session),
-):
-    stmt = (
-        select(Appeal)
-
-        .limit(limit)
-    )
