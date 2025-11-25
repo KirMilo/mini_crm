@@ -4,14 +4,15 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
 if TYPE_CHECKING:
-    from .source import Source
+    from .operators_to_sources import OperatorsToSources
+    from .appeal import Appeal
 
 
 class Operator(Base):
     is_active: Mapped[bool]
     req_limit: Mapped[int] = mapped_column(default=10)
 
-    sources: Mapped[list[Mapped["Source"]]] = relationship(
-        secondary="operators_to_sources",
-        back_populates="operators",
+    appeals: Mapped[list["Appeal"]] = relationship(back_populates="operator")
+    sources_association: Mapped[list["OperatorsToSources"]] = relationship(
+        back_populates="operator",
     )
