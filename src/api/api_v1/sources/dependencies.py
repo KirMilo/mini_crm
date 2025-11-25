@@ -34,7 +34,7 @@ def get_operators_weights(
 
 
 async def get_source(
-        source_id: Annotated[int, Path(int, title="Source ID")],
+        source_id: Annotated[int, Path(title="Source ID")],
         session: AsyncSession = Depends(get_async_session),
 ):
     source: Source | None = await session.get(Source, source_id)
@@ -44,7 +44,7 @@ async def get_source(
 
 
 async def get_operators_to_source(
-        source_id: Annotated[int, Path(int, title="Source ID")],
+        source_id: Annotated[int, Path( title="Source ID")],
         session: AsyncSession = Depends(get_async_session),
 ) -> Sequence[OperatorsToSources]:
     stmt = (
