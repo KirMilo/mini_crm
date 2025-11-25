@@ -15,6 +15,7 @@ class Appeal(Base):
     lead_id: Mapped[int] = mapped_column(ForeignKey('leads.id'))
     source_id: Mapped[int] = mapped_column(ForeignKey('sources.id'))
     operator_id: Mapped[int] = mapped_column(ForeignKey('operators.id'))
+    is_opened: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc)
