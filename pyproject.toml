@@ -1,0 +1,12 @@
+[project]
+name = "mini-crm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "alembic>=1.17.2",
+    "fastapi>=0.121.3",
+    "uvicorn>=0.38.0",
+]
