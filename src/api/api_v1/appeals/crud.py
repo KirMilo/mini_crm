@@ -17,7 +17,6 @@ async def create_appeal(
         operators_weights: Sequence[Row[tuple[Operator, int]]] = Depends(get_operators),
         session: AsyncSession = Depends(get_async_session)
 ) -> Appeal:
-    print(operators_weights)
     if not operators_weights:
         raise AllOperatorsAreBusy()
 
