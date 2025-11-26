@@ -17,7 +17,7 @@ class CreateOperatorModel(BaseModel):
     req_limit: Annotated[
         int,
         Body(
-            min_length=1,
+            ge=1,
             title="Requests limit",
             description="Max requests for current operator",
         )
@@ -29,7 +29,7 @@ class UpdateOperatorModel(BaseModel):
     req_limit: Annotated[
                    int,
                    Body(
-                       min_length=1,
+                       ge=1,
                        title="Requests limit",
                        description="Max requests for current operator",
                    )

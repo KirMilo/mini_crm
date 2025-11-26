@@ -1,7 +1,7 @@
-from typing import Annotated, Sequence
+from typing import Annotated, Sequence, Any, Coroutine
 
 from fastapi import Depends, Path
-from sqlalchemy import select, func
+from sqlalchemy import select, func, Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.appeals.schemas import LeadModel
@@ -46,8 +46,8 @@ async def get_source(
 async def get_operators(
         source: Source = Depends(get_source),
         session: AsyncSession = Depends(get_async_session),
-) -> Sequence[tuple[Operator, int]]:
-    appeal_count = (
+) -> Sequence[Row[tuple[Operator, int]]]:
+    appeals_count = (
         select(func.count(Appeal.id))
         .where(Appeal.operator_id == Operator.id)
         .scalar_subquery()
@@ -56,12 +56,11 @@ async def get_operators(
     stmt = (
         select(Operator, OperatorsToSources.weight)
         .join(OperatorsToSources)
-        .join(Source)
         .where(
-            Source.id == source.id,
+            OperatorsToSources.source_id == source.id,
             Operator.is_active == True,
-            Operator.req_limit < appeal_count
+            Operator.req_limit > appeals_count
         )
     )
     response = await session.execute(stmt)
-    return response.scalars().all()
+    return response.all()

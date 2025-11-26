@@ -26,5 +26,6 @@ async def get_by_email(
 async def get_leads(
         leads_appeals: list[LeadAppealsModel] = Depends(get_leads_appeals)
 ) -> list[LeadAppealsModel]:
+    print(leads_appeals)
     """Получение списка лидов и их обращений"""
     return leads_appeals

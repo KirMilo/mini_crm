@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Iterable
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +11,7 @@ from core.db.models import Operator, Source, OperatorsToSources
 
 async def create_source(
         source_model: CreateSourceModel,
-        operators: Sequence[Operator] = Depends(get_operators),
+        operators: Iterable[Operator] = Depends(get_operators),
         session: AsyncSession = Depends(get_async_session),
 ) -> SourceResponseModel:
     weights = get_operators_weights(source_model.operators)
@@ -47,7 +47,7 @@ async def update_source(
 ):
     weights = get_operators_weights(source_model.operators)  # Получаем веса операторов
 
-    for items in source_model.model_dump(exclude={"operators"},):
+    for items in source_model.model_dump(exclude={"operators"},).items():
         setattr(source, *items)  # Обновляем поля Source
 
     for operator_source in operators_sources:

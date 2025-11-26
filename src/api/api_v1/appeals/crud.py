@@ -2,6 +2,7 @@ import random
 from typing import Sequence
 
 from fastapi import Depends
+from sqlalchemy import Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.appeals.dependencies import get_operators, get_lead, get_source
@@ -13,9 +14,10 @@ from core.exceptions.exceptions import AllOperatorsAreBusy
 async def create_appeal(
         source: Source = Depends(get_source),
         lead: Lead = Depends(get_lead),
-        operators_weights: Sequence[tuple[Operator, int]] = Depends(get_operators),
+        operators_weights: Sequence[Row[tuple[Operator, int]]] = Depends(get_operators),
         session: AsyncSession = Depends(get_async_session)
 ) -> Appeal:
+    print(operators_weights)
     if not operators_weights:
         raise AllOperatorsAreBusy()
 

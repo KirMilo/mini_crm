@@ -4,7 +4,8 @@ from core.config import settings
 
 engine = create_async_engine(
     url=settings.db.url,
-    connect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False},
+    echo=True
 )
 
 async_session_maker = async_sessionmaker(

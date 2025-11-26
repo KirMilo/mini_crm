@@ -40,17 +40,17 @@ async def get_lead_by_email(
 
 async def get_leads_appeals(
         session: AsyncSession = Depends(get_async_session),
-        limit: Annotated[int, Query(ge=1)] = 100
+        limit: Annotated[int | None, Query(ge=1)] = 100
 ) -> list[dict[str, ...]]:
     stmt = (
         select(Lead, Appeal)
-        .join(Appeal, Lead.id == Appeal.lead_id)
+        .join(Appeal)
         .limit(limit)
     )
     response = await session.execute(stmt)
-    leads_appeals = response.scalars().all()
+    leads_appeals = response.all()
     return [
-        {"lead": lead, "appeals": list(appeals)}
+        {"lead": lead, "appeals": [appeal for _, appeal in appeals]}
         for lead, appeals in groupby(
             leads_appeals, key=lambda _: _[0])
     ]

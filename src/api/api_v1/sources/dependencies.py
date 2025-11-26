@@ -1,4 +1,4 @@
-from typing import Sequence, Annotated
+from typing import Sequence, Annotated, Iterable
 
 from fastapi import Depends, Path
 from sqlalchemy import select
@@ -13,9 +13,11 @@ from core.exceptions.exceptions import SourceNotFound
 async def get_operators(
         source_model: CreateSourceModel,
         session: AsyncSession = Depends(get_async_session),
-) -> Sequence[tuple[Operator, int]]:
+) -> Iterable[Operator]:
+    if source_model.operators is None:
+        return []
     response = await session.execute(
-        select(Operator, Operator.id)
+        select(Operator)
         .where(
             Operator.id.in_(
                 [operator.id for operator in source_model.operators]
